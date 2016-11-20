@@ -4,7 +4,7 @@
 angular
   .module('app', [])
   .controller('appCtrl', ['$scope', '$http', '$window', function appCtrl($scope, $http, $window) {
-      var imgData;
+      var imgData = [];
       $window.fbAsyncInit = function() {
           FB.init({
               appId: '1151594398249523',
@@ -22,9 +22,8 @@ angular
                           '/1283053661745309/photos?fields=link,name,images',
                           function(response) {
                               if (response && !response.error) {
-                                  imgData = response.data;
                                   response.data.forEach(function(element){
-                                      console.log(element.images[0].source);
+                                      imgData.push(element.images[0].source);
                                   });
                               } else {
                                   console.log("nothing");
