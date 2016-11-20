@@ -37,7 +37,7 @@ angular
             var addressToQuery = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?Address="
                                     + address + "&City=" + getLastWord(address) + "&Country=UK&outFields=type,city,country&f=pjson";
 
-            getPJSON(addressToQuery)
+            $scope.getPJSON(addressToQuery)
             console.log(URL);
             console.log(getLastWord(address));
 
@@ -62,6 +62,8 @@ angular
                                 $http.post('/', imgData, postConfig)
                                     .then(function(resp) {
                                         console.log(resp)
+                                    }).then(function(response) {
+                                      $scope.emotions = response.data; 
                                     });
                                 imgData = [];
                             } else {
