@@ -44,7 +44,7 @@ router.post('/', function(req, res, next) {
   //
   request('http://localhost:3030/read', function(err, response, body) {
      //console.log(body);
-     res.json(body);
+     res.json(JSON.parse(body));
   });
 });
 

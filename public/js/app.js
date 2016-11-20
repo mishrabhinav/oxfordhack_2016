@@ -9,6 +9,9 @@ angular
         var newPoint;
         var newGraphic;
         var attributes = [];
+	var happyAverage;
+	var neutAverage;
+	var sadAverage;
 
 
         require([
@@ -90,11 +93,25 @@ angular
                     geometry: point,
                     symbol: markerSymbol,
                     attributes: attributes,
-                    popupTemplate: {
-                        title: attributes[0],
-                        happyness: attributes[1],
-                        neutral: attributes[2],
-                        sadness: attributes[3]
+                    
+		    popupTemplate: {
+                        title: "{AlbumName}",
+			content: [{
+                        	type: "fields",
+                        fieldInfos: [{
+                            fieldName: "AlbumName"
+                        }, {
+                            fieldName: "HappyAverage"
+                        }, {
+                            fieldName: "NeutAverage"
+			}, {
+			    fieldName: "SadAverage"
+                        }]
+                    }]
+			
+                        //happyness: attributes[1],
+                        //neutral: attributes[2],
+                        //sadness: attributes[3]
                     }
                 })
             }
@@ -183,28 +200,47 @@ angular
                                     $http.post('/', imgData, postConfig)
                                         .then(function(response) {
                                             $scope.emotions = response.data;
-                                        });
-                                    console.log(response.data)
-                                    var sadAverage = 0;
-                                        var happyAverage = 0;
-                                        var neutAverage = 0;
-                                        for (var i = 0; i < $scope.emotions.length; i++) {
-                                            sadAverage += $scope.emotions[i][6];
-                                            happyAverage += $scope.emotions[i][4];
-                                            neutAverage += $scope.emotions[i][5];
-                                        }
+                                        console.log(response.data)
+					sadAverage = 0;
+                                        happyAverage = 0;
+                                        neutAverage = 0;
+					console.log($scope.emotions)
+					$scope.emotions.forEach(function(emotion) {
+                                            sadAverage += emotion.sadness;
+                                            happyAverage += emotion.happiness;
+                                            neutAverage += emotion.neutral;
                                         sadAverage = average(sadAverage);
                                         happyAverage = average(happyAverage);
                                         neutAverage = average(neutAverage);
+					console.log(sadAverage)
+					return null;
+					//console.log(happyAverage)
+					//console.log(neutAverage)
 
-                                        attributes = [albumName, happyAverage, neutAverage, sadAverage];
+                                        })
 
-                                    imgData = [];
-                                    var x = $scope.pjson.candidates[0].location.x;
-                                    var y = $scope.pjson.candidates[0].location.y;
-                                    newPoint = createPoint(x, y);
+                                        }).then(function(val) {
+
+                                    if (albumName == null) {
+					console.log("albumnull");}
+                                    if (sadAverage == null) {
+					console.log("sadnull");}
+                                    if (happyAverage == null) {
+					console.log("happynull");}
+                                    if (neutAverage == null) {
+					console.log("neutnull");}
+
+				if (albumName && sadAverage && happyAverage && neutAverage) {
+					console.log("NOT NULL!!")
+				}				
+
+				    attributes = {AlbumName: albumName, HappyAverage: happyAverage, NeutAverage: neutAverage, SadAverage: sadAverage};
                                     newGraphic = setGraphic(newPoint, attributes);
                                     addNewPoint(newGraphic)
+
+					});
+                                        imgData = [];
+
                                 } else {
                                     console.log("nothing");
                                 }
@@ -219,6 +255,9 @@ angular
                     .then(function(response) {
                         $scope.pjson = response.data;
                         console.log($scope.pjson);
+                                    var x = $scope.pjson.candidates[0].location.x;
+                                    var y = $scope.pjson.candidates[0].location.y;
+                                    newPoint = createPoint(x, y);
                     })
             };
 
@@ -232,8 +271,8 @@ angular
                 return n[n.length - 1];
             }
 
-            function average(float) {
-                return float / 10;
+            function average(f) {
+                return f / 10;
             }
 
         });
