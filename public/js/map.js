@@ -2,51 +2,93 @@
  * Created by Alessandro on 20/11/2016.
  */
 require([
+    "esri/Map",
     "esri/views/MapView",
-    "esri/WebMap",
-    "esri/widgets/Locate",
+    "esri/geometry/Polyline",
+    "esri/geometry/Point",
+    "esri/geometry/Circle",
+    "esri/symbols/SimpleMarkerSymbol",
+    "esri/Graphic",
+    "esri/PopupTemplate",
     "dojo/domReady!"
-], function(MapView, WebMap, Locate){
+], function(
+    Map,
+    MapView,
+    Polyline,
+    Circle,
+    Point,
+    SimpleMarkerSymbol,
+    Graphic,
+    PopupTemplate
+) {
 
-    /************************************************************
-     * Creates a new WebMap instance. A WebMap must reference
-     * a PortalItem ID that represents a WebMap saved to
-     * arcgis.com or an on-premise portal.
-     *
-     * To load a WebMap from an on-premise portal, set the portal
-     * url in esriConfig.portalUrl.
-     ************************************************************/
+    var map = new Map({
+        basemap: "hybrid"
+    });
 
-    var webmap = new WebMap({
-        portalItem: { // autocasts as new PortalItem()
-            id: "f2e9b762544945f390ca4ac3671cfa72"
+    var view = new MapView({
+        center: [-80, 35],
+        container: "viewDiv",
+        map: map,
+        zoom: 3
+    });
+
+    // First create a line geometry (this is the Keystone pipeline)
+    var point = new Point({
+            latitude: 55.3,
+            longitude: 1.5
+        });
+
+    var markerSymbol = new SimpleMarkerSymbol({
+        color: [226, 119, 40],
+        outline: { // autocasts as new SimpleLineSymbol()
+            color: [255, 255, 255],
+            width: 2
+        }
+    });
+    /*
+    // Create a symbol for drawing the line
+    var lineSymbol = new SimpleLineSymbol({
+        color: [226, 119, 40],
+        width: 4
+    });
+*/
+    // Create an object for storing attributes related to the line
+    var pointAtt = {
+        Name: "Keystone Pipeline",
+        Owner: "TransCanada",
+        Length: "3,456 km"
+    };
+
+    /*******************************************
+     * Create a new graphic and add the geometry,
+     * symbol, and attributes to it. You may also
+     * add a simple PopupTemplate to the graphic.
+     * This allows users to view the graphic's
+     * attributes when it is clicked.
+     ******************************************/
+
+    var pointGraphic = new Graphic({
+        geometry: point,
+        symbol: markerSymbol,
+        attributes: pointAtt,
+
+        popupTemplate: {
+            title: "{Name}",
+            content: [{
+                type: "fields",
+                fieldInfos: [{
+                    fieldName: "Name"
+                }, {
+                    fieldName: "Owner"
+                }, {
+                    fieldName: "Length"
+                }]
+            }]
         }
     });
 
-    /************************************************************
-     * Set the WebMap instance to the map property in a MapView.
-     ************************************************************/
-    var view = new MapView({
-        map: webmap,
-        container: "viewDiv",
-        zoom: 6,  // Sets the zoom level based on level of detail (LOD)
-        center: [-1, 53]  // Sets the center point of view in lon/lat
-    });
 
-    var map = new Map({
-        basemap: "streets"
-    });
-
-
-    var locateBtn = new Locate({
-        view: view
-    });
-    locateBtn.startup();
-
-    // Add the locate widget to the top left corner of the view
-    view.ui.add(locateBtn, {
-        position: "top-left",
-        index: 0
-    });
-
+    // Add the line graphic to the view's GraphicsLayer
+    view.graphics.add(pointGraphic);
 });
