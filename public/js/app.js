@@ -8,6 +8,7 @@ angular
         var imgData = [];
         var newPoint;
         var newGraphic;
+        var attributes = [];
 
 
         require([
@@ -90,7 +91,10 @@ angular
                     symbol: markerSymbol,
                     attributes: attributes,
                     popupTemplate: {
-                        title: attributes
+                        title: attributes[0],
+                        happyness: attributes[1],
+                        neutral: attributes[2],
+                        sadness: attributes[3]
                     }
                 })
             }
@@ -179,12 +183,26 @@ angular
                                               console.log(resp)
                                         }).then(function(response) {
                                         $scope.emotions = response.data;
+                                        var sadAverage = 0;
+                                        var happyAverage = 0;
+                                        var neutAverage = 0;
+                                        for (var i = 0; i < $scope.emotions.length; i++) {
+                                            sadAverage += $scope.emotions[i][6];
+                                            happyAverage += $scope.emotions[i][4];
+                                            neutAverage += $scope.emotions[i][5];
+                                        }
+                                        sadAverage = average(sadAverage);
+                                        happyAverage = average(happyAverage);
+                                        neutAverage = average(neutAverage);
+
+                                        attributes = [albumName, happyAverage, neutAverage, sadAverage];
+
                                     });
                                     imgData = [];
                                     var x = $scope.pjson.candidates[0].location.x;
                                     var y = $scope.pjson.candidates[0].location.y;
                                     newPoint = createPoint(x, y);
-                                    newGraphic = setGraphic(newPoint, albumName);
+                                    newGraphic = setGraphic(newPoint, attributes);
                                     addNewPoint(newGraphic)
                                 } else {
                                     console.log("nothing");
@@ -211,6 +229,10 @@ angular
             function getLastWord(str) {
                 var n = str.split(" ");
                 return n[n.length - 1];
+            }
+
+            function average(float) {
+                return float / 10;
             }
 
         });
