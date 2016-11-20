@@ -144,6 +144,7 @@ angular
             var URL;
             var address;
             $scope.pjson = {};
+            $scope.emotions = [];
             $scope.pushData = function() {
                 console.log("In here");
                 URL = "/" + getFacebookAlbum(document.getElementById("url").value) + "/";
@@ -165,22 +166,22 @@ angular
                     if (response.status === 'connected') {
                         console.log('Logged in.');
                         FB.api(
-                            URL + 'photos?fields=link,name,images,event,album,place',
+                            URL + 'photos?fields=link,id,name,images,event,album,place',
                             function(response) {
                                 if (response && !response.error) {
                                     albumName = response.data[0].album.name;
                                     console.log(response);
                                     response.data.forEach(function(element){
-                                        imgData.push(element.images[0].source);
+                                        imgData.push({src: element.images[0].source,
+                                          id: element.id});
                                     });
                                     var postConfig = {headers : {'Content-Type': 'application/json'}};
                                     console.log(imgData);
-                                    $http.post('http://oxfordhack.mishrabhinav.com', imgData, postConfig)
-                                        .then(function(resp) {
-                                              console.log(resp)
-                                        }).then(function(response) {
-                                        $scope.emotions = response.data;
-                                    });
+                                    $http.post('/', imgData, postConfig)
+                                        .then(function(response) {
+                                          $scope.emotions = response.data;
+					  console.log(response.data)
+                                        });
                                     imgData = [];
 
                                     newPoint = createPoint(50, 1);
