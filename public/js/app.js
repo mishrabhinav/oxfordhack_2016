@@ -29,21 +29,20 @@ angular
         }(document, 'script', 'facebook-jssdk'));
 
         var URL;
-        var pos;
-
-        function getURL(){
-            URL = document.getElementById("url").value;
-            pos = document.getElementById("pos").value;
-            console.log(URL);
-            console.log(pos);
-
-        }
+        var address;
 
         $scope.pushData = function() {
             console.log("In here");
-            URL = document.getElementById("url").value;
+            URL = "/" + getFacebookAlbum(document.getElementById("url").value) + "/";
+            address = document.getElementById("pos").value;
 
-            FB.getLoginStatus(function(response) {
+            var addressToQuery = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?Address="
+                                    + address + "&City=" + getLastWord(address) + "&Country=UK&outFields=type,city,country&f=pjson";
+
+            console.log(URL);
+            console.log(getLastWord(address));
+
+                FB.getLoginStatus(function(response) {
                 while (response.status !== 'connected') {
                     console.log("not logged in");
                     FB.login();
@@ -51,7 +50,6 @@ angular
                 if (response.status === 'connected') {
                     console.log('Logged in.');
                     FB.api(
-                        //TODO Parse the actual URL, getting the numbers after album_id
                         URL + 'photos?fields=link,name,images,event,album,place',
                         function(response) {
                             if (response && !response.error) {
@@ -82,4 +80,15 @@ angular
             console.log("In here2");
 
         };
+
+        function getFacebookAlbum(str) {
+            var n = str.split("&album_id=");
+            return n[n.length - 1];
+        }
+
+        function getLastWord(str) {
+            var n = str.split(" ");
+            return n[n.length - 1];
+        }
+
     }]);
