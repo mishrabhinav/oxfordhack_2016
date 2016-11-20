@@ -37,6 +37,7 @@ angular
             var addressToQuery = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?Address="
                                     + address + "&City=" + getLastWord(address) + "&Country=UK&outFields=type,city,country&f=pjson";
 
+            getPJSON(addressToQuery)
             console.log(URL);
             console.log(getLastWord(address));
 
@@ -71,6 +72,13 @@ angular
                 }
             });
         };
+
+        $scope.getPJSON = function(addressToQuery) {
+          $http.get(addressToQuery)
+            .then(function(response) {
+               $scope.pjson = response.data;
+	    })
+	}
 
         function getFacebookAlbum(str) {
             var n = str.split("&album_id=");
