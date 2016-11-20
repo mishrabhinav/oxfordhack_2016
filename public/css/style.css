@@ -1,0 +1,58 @@
+.form-area {
+    width: 50%;
+    padding-top: 4%;
+    padding-bottom: 1%;
+    margin: auto;
+    display: block;
+}
+
+.navbar-brand {
+    float: left;
+    height: 50px;
+    padding: 15px 15px 0 20px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.navbar-default {
+    background-color: #2b669a;
+    border-color: #e7e7e7;
+}
+
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #e9e9e9;
+    background-color: transparent;
+}
+
+.welcome {
+    padding-top: 1%;
+    padding-bottom: 2%;
+    text-align: center;
+}
+
+.btn-primary {
+    margin: auto;
+    display: block;
+}
+
+#viewDiv {
+    /*
+    float: left;
+    padding: 0;
+    margin: 0;
+    width: 50%;
+    height: 100%;
+    */
+}
+
+#formDiv {
+/*
+    float: left;
+    width: 50%;
+    height: 100%
+*/
+}
