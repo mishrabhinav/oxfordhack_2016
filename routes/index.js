@@ -16,6 +16,7 @@ router.post('/', function(req, res, next) {
 
   var messageAttributes = {};
 
+  console.log(req.body);
   for(var i = 0; i < 10; i++) {
     messageAttributes[req.body[i].id] = {
       DataType: "String",
