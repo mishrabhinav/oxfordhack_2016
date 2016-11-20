@@ -23,14 +23,14 @@ require([
 ) {
 
     var map = new Map({
-        basemap: "hybrid"
+        basemap: "streets"
     });
 
     var view = new MapView({
-        center: [-80, 35],
+        center: [-1, 53],
         container: "viewDiv",
         map: map,
-        zoom: 3
+        zoom: 6
     });
 
     // First create a line geometry (this is the Keystone pipeline)
