@@ -34,6 +34,8 @@ require([
     });
 
     // First create a line geometry (this is the Keystone pipeline)
+
+
     var point = new Point({
             latitude: 55.3,
             longitude: 1.5

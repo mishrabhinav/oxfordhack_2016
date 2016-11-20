@@ -28,7 +28,7 @@ angular
 
         var URL;
         var address;
-
+$scope.pjson = {};
         $scope.pushData = function() {
             console.log("In here");
             URL = "/" + getFacebookAlbum(document.getElementById("url").value) + "/";
@@ -61,9 +61,9 @@ angular
                                 console.log(imgData);
                                 $http.post('/', imgData, postConfig)
                                     .then(function(resp) {
-                                        console.log(resp)
+                                      //  console.log(resp)
                                     }).then(function(response) {
-                                      $scope.emotions = response.data; 
+                                      //$scope.emotions = response.data;
                                     });
                                 imgData = [];
                             } else {
@@ -79,6 +79,7 @@ angular
           $http.get(addressToQuery)
             .then(function(response) {
                $scope.pjson = response.data;
+                console.log($scope.pjson);
 	    })
 	}
 
