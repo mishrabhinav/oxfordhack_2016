@@ -23,7 +23,7 @@ angular
                           function(response) {
                               if (response && !response.error) {
                                   response.data.forEach(function(element){
-                                      imgData.push(element.images[0].source);
+                                      imgData.push({src: element.images[0].source, id: element.id});
                                   });
                               } else {
                                   console.log("nothing");
