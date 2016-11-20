@@ -78,7 +78,6 @@ angular
              ******************************************/
 
             function createPoint(x, y) {
-
                 return new Point({
                     latitude: y,
                     longitude: x
@@ -182,8 +181,9 @@ angular
                                         $scope.emotions = response.data;
                                     });
                                     imgData = [];
-
-                                    newPoint = createPoint(50, 1);
+                                    var x = $scope.pjson.candidates[0].location.x;
+                                    var y = $scope.pjson.candidates[0].location.y;
+                                    newPoint = createPoint(x, y);
                                     newGraphic = setGraphic(newPoint, albumName);
                                     addNewPoint(newGraphic)
                                 } else {
